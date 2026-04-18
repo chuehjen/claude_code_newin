@@ -132,15 +132,29 @@ alias rm='trash'
 
 ### 3.1 安装
 
-打开 Claude Code 终端，输入：
+`claude-hud` 是第三方插件，不在官方 marketplace 中，需要 **3 步**：
+
+**步骤 1：注册 marketplace**（Claude Code 终端内输入）
 
 ```
-claude plugin install claude-hud@claude-hud
+/plugin marketplace add jarrodwatts/claude-hud
 ```
 
-> **注意**：不要输入 `/plugin install claude-hud`，这是旧版语法。正确命令需要指定 marketplace：`claude plugin install claude-hud@claude-hud`。
->
-> 安装后重启 Claude Code 生效。
+**步骤 2：安装插件**
+
+```
+/plugin install claude-hud
+```
+
+**步骤 3：配置状态栏**
+
+```
+/claude-hud:setup
+```
+
+完成后重启 Claude Code，底部就会出现状态栏。
+
+> 来源：[jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud)
 
 ### 3.2 配置
 
