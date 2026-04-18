@@ -23,10 +23,7 @@ npm i -g @anthropic-ai/claude-code
 # 4. 登录 Claude Code
 claude login
 
-# 5. CMUX 终端（macOS 专属，GPU 渲染加速）
-brew install --cask cmux
-
-# 6. （可选）GitHub CLI
+# 5. （可选）GitHub CLI
 brew install gh
 ```
 
@@ -138,10 +135,12 @@ alias rm='trash'
 打开 Claude Code 终端，输入：
 
 ```
-/plugin install claude-hud
+claude plugin install claude-hud@claude-hud
 ```
 
-来源：[jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud)
+> **注意**：不要输入 `/plugin install claude-hud`，这是旧版语法。正确命令需要指定 marketplace：`claude plugin install claude-hud@claude-hud`。
+>
+> 安装后重启 Claude Code 生效。
 
 ### 3.2 配置
 
