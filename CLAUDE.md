@@ -1,26 +1,38 @@
-# Claude Code 配置
+# Claude Code Preferences
 
-## 沟通偏好
+## Communication
 
-- 中文回复，简洁直接
-- 代码风格: TypeScript + strict mode，函数式组件 + hooks
-- CSS: 仅 Tailwind CSS
-- 提交: Conventional Commits + 中文描述
-- 变更前先跑测试，不主动 commit/push
+- Chinese by default (中文回复), concise and direct
 
-## 权限策略
+## Code Style
 
-- 模式: `bypassPermissions`（白名单自动执行）
-- 黑名单: `rm -rf`、`git push --force`、`git reset --hard`、`git checkout -- *`、`git clean -fd`、`git branch -D`、`git rebase --abort`、`sudo`、`dd`、`mkfs`、`apt-get remove`、`brew uninstall`
+- TypeScript + strict mode, named exports over default
+- Functional components + hooks (React)
+- CSS: Tailwind CSS only (no CSS-in-JS / CSS Modules unless project already uses them)
+- Commits: Conventional Commits + Chinese scope, e.g. `feat(auth): 添加登录页面的表单验证`
 
-## HUD 状态栏
+## Tools
 
-- 插件: claude-hud v0.0.12
-- 语言: en
-- 布局: Compact + Separators（单行）
-- 显示: 模型名 + Context 进度条 + 5h/7d 用量 + Git 分支（含脏标记）+ 项目名称 + 会话名称
-- `modelOverride`: "🐱🐱 Qwen3.6-Plus"
+- New projects: Vite + Tailwind CSS
 
-## 项目上下文
+## Workflow
 
-前端 Web 应用、Web 游戏、UI/UX 原型设计。
+- Run tests before AND after changes
+- Never commit or push unless explicitly asked
+- Ask before destructive operations (delete, overwrite, force push)
+- Bug fixes: reproduce first, focus on root cause, don't clean up surrounding code
+
+## Design
+
+- **ui-ux-pro-max** for design decisions (style, color, industry adaptation)
+- **impeccable** for building UI components from scratch
+- Avoid generic AI aesthetic. Maintain WCAG AA contrast and clear typography hierarchy.
+
+## HUD
+
+- Plugin: claude-hud v0.0.12
+- Use default layout configuration
+
+## Project Context
+
+Frontend web apps, web games, UI/UX prototyping.
