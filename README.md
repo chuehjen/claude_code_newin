@@ -79,52 +79,11 @@ source ~/.zshrc
 
 **验证**：`trash --version` 应显示版本号。
 
-### 2.2 危险指令黑名单 + 偏好设置
+### 2.2 危险指令黑名单
 
-创建或编辑 `~/.claude/CLAUDE.md`，写入以下内容：
+**作用：** 告诉 Claude Code 绝对不要执行这些危险命令。
 
-```markdown
-# Claude Code Preferences
-
-## Communication
-
-- Chinese by default (中文回复), concise and direct
-
-## Code Style
-
-- TypeScript + strict mode, named exports over default
-- Functional components + hooks (React)
-- CSS: Tailwind CSS only (no CSS-in-JS / CSS Modules unless project already uses them)
-- Commits: Conventional Commits + Chinese scope, e.g. `feat(auth): 添加登录页面的表单验证`
-
-## Tools
-
-- New projects: Vite + Tailwind CSS
-
-## Workflow
-
-- Run tests before AND after changes
-- Never commit or push unless explicitly asked
-- Ask before destructive operations (delete, overwrite, force push)
-- Bug fixes: reproduce first, focus on root cause, don't clean up surrounding code
-
-## Design
-
-- **ui-ux-pro-max** for design decisions (style, color, industry adaptation)
-- **impeccable** for building UI components from scratch
-- Avoid generic AI aesthetic. Maintain WCAG AA contrast and clear typography hierarchy.
-
-## HUD
-
-- Plugin: claude-hud v0.0.12
-- Use default layout configuration
-
-## Project Context
-
-Frontend web apps, web games, UI/UX prototyping.
-```
-
-创建或编辑 `~/.claude/settings.json`，写入以下内容：
+找到 `~/.claude/settings.json`，在 `permissions.deny` 数组里加入以下内容（如果文件不存在就创建，已有内容就追加）：
 
 ```json
 {
@@ -146,7 +105,25 @@ Frontend web apps, web games, UI/UX prototyping.
       "Bash(sudo:*)"
     ],
     "defaultMode": "allow"
-  },
+  }
+}
+```
+
+**权限模式说明：**
+
+| 模式 | 体验 | 适合谁 |
+|------|------|--------|
+| `allow` | 默认允许执行，仅拦截 deny 列表（黑名单模式） | 日常使用，推荐 |
+| `bypassPermissions` | 默认拦截所有命令，需要手动确认（白名单模式） | 对安全要求极高的场景 |
+
+**验证**：在 Claude Code 中让 AI 执行 `rm -rf /tmp/test`，应被拦截。
+
+### 2.3 推荐的 settings.json 配置项
+
+除了黑名单，以下设置也建议加上（追加到 `settings.json` 中）：
+
+```json
+{
   "model": "sonnet[1m]",
   "enableAllProjectMcpServers": true,
   "extraKnownMarketplaces": {
@@ -162,32 +139,12 @@ Frontend web apps, web games, UI/UX prototyping.
 }
 ```
 
-**说明：**
-
-- `defaultMode: "allow"` — 默认允许执行，仅拦截 deny 列表（黑名单模式），日常效率最高
-- `enableAllProjectMcpServers: true` — 启用所有项目级 MCP 服务器
-- `model: "sonnet[1m]"` — 使用 1M context 的 Sonnet 模型
-- 黑名单比仓库原版少了 `curl | bash` 和 `chmod 777`，因为日常开发偶尔会用到（比如安装脚本）
-
-**验证**：在 Claude Code 中让 AI 执行 `rm -rf /tmp/test`，应被拦截。
-
-### 2.3 Claude Code Proxy 配置
-
-如果你也使用代理连接 LLM API，创建或编辑 `~/.config/claude-code-proxy/config.json`：
-
-```json
-{
-  "baseURL": "<YOUR_PROXY_BASE_URL>",
-  "modelMapping": {
-    "small_model": "claude-sonnet-4-6",
-    "model": "claude-sonnet-4-6",
-    "opus_model": "claude-sonnet-4-6"
-  },
-  "apiKey": "<YOUR_API_KEY>"
-}
-```
-
-**说明：** 三档模型全部使用 `claude-sonnet-4-6`。`baseURL` 和 `apiKey` 根据你自己的代理配置填写。
+| 配置项 | 说明 |
+|--------|------|
+| `model: "sonnet[1m]"` | 使用 1M context 的 Sonnet 模型 |
+| `enableAllProjectMcpServers: true` | 启用所有项目级 MCP 服务器 |
+| `effortLevel: "medium"` | 中等推理深度，平衡速度和质量 |
+| `skipDangerousModePermissionPrompt: true` | 跳过危险模式权限提示 |
 
 ---
 
@@ -270,15 +227,60 @@ Frontend web apps, web games, UI/UX prototyping.
 │       └── config.json    # HUD 插件配置
 ├── keybindings.json       # 自定义快捷键
 └── scheduled_tasks.json   # 定时任务
-
-~/.config/
-└── claude-code-proxy/
-    └── config.json        # 代理配置（如使用）
 ```
 
 ---
 
-## 六、推荐安装的 Skills
+## 六、我的 CLAUDE.md（可选）
+
+> **注意：** 全局 CLAUDE.md 会影响所有项目。如果你的项目用不同技术栈（Rust、Go 等），建议把 CLAUDE.md 放在项目目录里而不是 `~/.claude/`。
+
+如果你也是前端开发者，可以直接用我的配置，在 `~/.claude/CLAUDE.md` 写入：
+
+```markdown
+# Claude Code Preferences
+
+## Communication
+
+- Chinese by default (中文回复), concise and direct
+
+## Code Style
+
+- TypeScript + strict mode, named exports over default
+- Functional components + hooks (React)
+- CSS: Tailwind CSS only (no CSS-in-JS / CSS Modules unless project already uses them)
+- Commits: Conventional Commits + Chinese scope, e.g. `feat(auth): 添加登录页面的表单验证`
+
+## Tools
+
+- New projects: Vite + Tailwind CSS
+
+## Workflow
+
+- Run tests before AND after changes
+- Never commit or push unless explicitly asked
+- Ask before destructive operations (delete, overwrite, force push)
+- Bug fixes: reproduce first, focus on root cause, don't clean up surrounding code
+
+## Design
+
+- **ui-ux-pro-max** for design decisions (style, color, industry adaptation)
+- **impeccable** for building UI components from scratch
+- Avoid generic AI aesthetic. Maintain WCAG AA contrast and clear typography hierarchy.
+
+## HUD
+
+- Plugin: claude-hud v0.0.12
+- Use default layout configuration
+
+## Project Context
+
+Frontend web apps, web games, UI/UX prototyping.
+```
+
+---
+
+## 七、推荐安装的 Skills
 
 以下 Skills 是我日常在用的，按需安装：
 
