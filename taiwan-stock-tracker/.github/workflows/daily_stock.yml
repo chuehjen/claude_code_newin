@@ -1,0 +1,29 @@
+name: 台股外資買超日報
+
+on:
+  schedule:
+    # 每個交易日 台北時間 16:05 (UTC+8 → UTC 08:05)
+    - cron: '5 8 * * 1-5'
+  workflow_dispatch:  # 允許手動觸發
+
+jobs:
+  daily-stock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tracker
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
+          LINE_ACCESS_TOKEN: ${{ secrets.LINE_ACCESS_TOKEN }}
+        run: python main.py
